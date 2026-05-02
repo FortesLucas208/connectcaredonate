@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 });
 
 const WEBHOOK_URL =
-  "https://hook.us2.make.com/pjsqxdypgknvsnqvvjfamlwm6s5vrc1q";
+  "https://hook.us2.make.com/wuyc6tpiabufqfci06i4toat6vnb33qa";
 
 type Msg = { role: "user" | "bot"; text: string };
 
