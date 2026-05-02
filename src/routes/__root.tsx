@@ -29,14 +29,18 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "ConnectCare" },
+      { name: "description", content: "Connect & Give facilitates donations to NGOs through an interactive chatbot interface." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "ConnectCare" },
+      { property: "og:description", content: "Connect & Give facilitates donations to NGOs through an interactive chatbot interface." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "ConnectCare" },
+      { name: "twitter:description", content: "Connect & Give facilitates donations to NGOs through an interactive chatbot interface." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/96a2a133-a5c1-4782-8f15-9750214e3731/id-preview-75d096c4--ed4a467f-66ee-495d-9162-f0b142af3b02.lovable.app-1777684067488.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/96a2a133-a5c1-4782-8f15-9750214e3731/id-preview-75d096c4--ed4a467f-66ee-495d-9162-f0b142af3b02.lovable.app-1777684067488.png" },
     ],
     links: [
       {
