@@ -21,54 +21,61 @@ export const Route = createFileRoute("/")({
 const WEBHOOK_URL =
   "https://hook.us2.make.com/wuyc6tpiabufqfci06i4toat6vnb33qa";
 
-type Msg = { role: "user" | "bot"; text: string };
+type Donation = "" | "Roupa" | "Roupas de frio" | "Cobertores" | "Calçados" | "Alimentos";
+
+const UFS = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+const DONATIONS = ["Roupa", "Roupas de frio", "Cobertores", "Calçados", "Alimentos"];
 
 function Index() {
   const [showForm, setShowForm] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<Msg[]>([
-    {
-      role: "bot",
-      text: "Olá! 👋 Sou o assistente da ConnectCare. Me conte qual causa toca o seu coração e eu indico ONGs regulamentadas para a sua doação.",
-    },
-  ]);
   const [loading, setLoading] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading]);
+  const [firstName, setFirstName] = useState("");
+  const [uf, setUf] = useState("");
+  const [city, setCity] = useState("");
+  const [cep, setCep] = useState("");
+  const [donationType, setDonationType] = useState<Donation>("");
 
-  const sendMessage = async () => {
-    const trimmed = input.trim().slice(0, 1000);
-    if (!trimmed || loading) return;
-    setMessages((m) => [...m, { role: "user", text: trimmed }]);
-    setInput("");
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(false);
+
+    const name = firstName.trim().slice(0, 60);
+    const cityT = city.trim().slice(0, 80);
+    const cepT = cep.trim().slice(0, 9);
+
+    if (!name || !uf || !cityT || !cepT || !donationType) {
+      setError("Por favor, preencha todos os campos.");
+      return;
+    }
+    if (!/^\d{5}-?\d{3}$/.test(cepT)) {
+      setError("CEP inválido. Use o formato 00000-000.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed, timestamp: new Date().toISOString() }),
+        body: JSON.stringify({
+          firstName: name,
+          uf,
+          city: cityT,
+          cep: cepT,
+          donationType,
+          timestamp: new Date().toISOString(),
+        }),
       });
-      const text = await res.text();
-      let reply = text;
-      try {
-        const json = JSON.parse(text);
-        reply = json.reply ?? json.message ?? json.output ?? text;
-      } catch {
-        /* texto puro */
-      }
-      setMessages((m) => [
-        ...m,
-        { role: "bot", text: reply || "Recebido! Em instantes retornarei com indicações." },
-      ]);
+      if (!res.ok) throw new Error("Falha no envio");
+      setSuccess(true);
+      setFirstName(""); setUf(""); setCity(""); setCep(""); setDonationType("");
     } catch {
-      setMessages((m) => [
-        ...m,
-        { role: "bot", text: "Não consegui conectar agora. Tente novamente em instantes." },
-      ]);
+      setError("Não foi possível enviar agora. Tente novamente em instantes.");
     } finally {
       setLoading(false);
     }
