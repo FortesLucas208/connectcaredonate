@@ -87,7 +87,7 @@ function Index() {
       <header className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="ConnectCare" className="h-16 md:h-20 w-auto" />
+            <img src={logo} alt="ConnectCare" className="h-10 md:h-12 w-auto" />
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
