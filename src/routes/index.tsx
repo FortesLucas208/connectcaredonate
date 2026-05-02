@@ -1,26 +1,286 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState, useRef, useEffect } from "react";
+import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2 } from "lucide-react";
+import logo from "@/assets/connectcare-logo.png";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  head: () => ({
+    meta: [
+      { title: "ConnectCare — Doe para ONGs regulamentadas" },
+      {
+        name: "description",
+        content:
+          "Converse com nosso assistente e descubra ONGs regulamentadas para fazer sua doação com segurança.",
+      },
+    ],
+  }),
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+const WEBHOOK_URL =
+  "https://hook.us2.make.com/pjsqxdypgknvsnqvvjfamlwm6s5vrc1q";
+
+type Msg = { role: "user" | "bot"; text: string };
 
 function Index() {
-  return <PlaceholderIndex />;
+  const [showForm, setShowForm] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState<Msg[]>([
+    {
+      role: "bot",
+      text: "Olá! 👋 Sou o assistente da ConnectCare. Me conte qual causa toca o seu coração e eu indico ONGs regulamentadas para a sua doação.",
+    },
+  ]);
+  const [loading, setLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+  }, [messages, loading]);
+
+  const sendMessage = async () => {
+    const trimmed = input.trim().slice(0, 1000);
+    if (!trimmed || loading) return;
+    setMessages((m) => [...m, { role: "user", text: trimmed }]);
+    setInput("");
+    setLoading(true);
+    try {
+      const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: trimmed, timestamp: new Date().toISOString() }),
+      });
+      const text = await res.text();
+      let reply = text;
+      try {
+        const json = JSON.parse(text);
+        reply = json.reply ?? json.message ?? json.output ?? text;
+      } catch {
+        /* texto puro */
+      }
+      setMessages((m) => [
+        ...m,
+        { role: "bot", text: reply || "Recebido! Em instantes retornarei com indicações." },
+      ]);
+    } catch {
+      setMessages((m) => [
+        ...m,
+        { role: "bot", text: "Não consegui conectar agora. Tente novamente em instantes." },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen" style={{ background: "var(--gradient-soft)" }}>
+      {/* Header */}
+      <header className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img src={logo} alt="ConnectCare" className="h-10 md:h-12 w-auto" />
+          </div>
+          <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
+            <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
+            <a href="#chat" className="hover:text-foreground transition">Conversar</a>
+            <a href="#regulamentadas" className="hover:text-foreground transition">ONGs</a>
+            <Button
+              onClick={() => setShowForm(true)}
+              className="rounded-full px-5"
+              style={{ background: "var(--gradient-brand)", color: "white" }}
+            >
+              <Heart className="w-4 h-4 mr-2" /> Cadastrar ONG
+            </Button>
+          </nav>
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-muted"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-label="Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        </div>
+        {menuOpen && (
+          <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
+            <a href="#sobre" onClick={() => setMenuOpen(false)} className="text-sm">Sobre</a>
+            <a href="#chat" onClick={() => setMenuOpen(false)} className="text-sm">Conversar</a>
+            <a href="#regulamentadas" onClick={() => setMenuOpen(false)} className="text-sm">ONGs</a>
+            <Button
+              onClick={() => { setShowForm(true); setMenuOpen(false); }}
+              className="rounded-full"
+              style={{ background: "var(--gradient-brand)", color: "white" }}
+            >
+              <Heart className="w-4 h-4 mr-2" /> Cadastrar ONG
+            </Button>
+          </div>
+        )}
+      </header>
+
+      <main className="max-w-5xl mx-auto px-4 py-10 md:py-14">
+        {/* Hero */}
+        <section id="sobre" className="text-center max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-xs font-medium mb-6">
+            <Sparkles className="w-3.5 h-3.5" /> Doação consciente, conexão real
+          </div>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground leading-tight">
+            Conectando corações a quem mais{" "}
+            <span
+              className="bg-clip-text text-transparent"
+              style={{ backgroundImage: "var(--gradient-brand)" }}
+            >
+              precisa
+            </span>
+          </h1>
+          <p className="mt-5 text-base md:text-lg text-muted-foreground leading-relaxed">
+            Doar é mais do que ajudar — é transformar histórias. Cada gesto sustenta projetos
+            que cuidam de pessoas, animais e do nosso planeta. Aqui você conversa com nosso
+            assistente e descobre, com segurança, ONGs alinhadas à sua causa.
+          </p>
+          <div className="mt-6 inline-flex items-center gap-2 text-sm text-secondary-foreground bg-secondary/40 px-4 py-2 rounded-full">
+            <ShieldCheck className="w-4 h-4" />
+            Apenas ONGs <strong className="font-semibold">regulamentadas</strong> são cadastradas em nossa rede.
+          </div>
+        </section>
+
+        {/* Chat */}
+        <section id="chat" className="mt-12 md:mt-16">
+          <div
+            className="rounded-3xl bg-card border border-border/60 overflow-hidden"
+            style={{ boxShadow: "var(--shadow-soft)" }}
+          >
+            <div
+              className="px-6 py-4 flex items-center gap-3 border-b border-border/60"
+              style={{ background: "var(--gradient-brand)" }}
+            >
+              <div className="w-9 h-9 rounded-full bg-white/25 flex items-center justify-center">
+                <Heart className="w-4 h-4 text-white" />
+              </div>
+              <div className="text-white">
+                <div className="font-semibold leading-tight">Assistente ConnectCare</div>
+                <div className="text-xs text-white/80">Online • respostas em tempo real</div>
+              </div>
+            </div>
+
+            <div ref={scrollRef} className="h-[420px] overflow-y-auto px-4 md:px-6 py-6 space-y-4 bg-muted/30">
+              {messages.map((m, i) => (
+                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+                      m.role === "user"
+                        ? "rounded-br-sm text-white"
+                        : "rounded-bl-sm bg-card text-foreground border border-border/60"
+                    }`}
+                    style={m.role === "user" ? { background: "var(--gradient-brand)" } : undefined}
+                  >
+                    {m.text}
+                  </div>
+                </div>
+              ))}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="px-4 py-3 rounded-2xl rounded-bl-sm bg-card border border-border/60 text-muted-foreground text-sm flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" /> Pensando...
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="p-3 md:p-4 border-t border-border/60 bg-card flex items-end gap-2">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                  }
+                }}
+                placeholder="Digite sua mensagem... Ex: quero doar para causas infantis"
+                rows={1}
+                maxLength={1000}
+                className="flex-1 resize-none rounded-2xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 max-h-32"
+              />
+              <Button
+                onClick={sendMessage}
+                disabled={loading || !input.trim()}
+                className="rounded-2xl h-12 px-5"
+                style={{ background: "var(--gradient-brand)", color: "white" }}
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Info */}
+        <section id="regulamentadas" className="mt-16 grid md:grid-cols-3 gap-5">
+          {[
+            {
+              icon: Heart,
+              title: "Por que doar?",
+              text: "Pequenas doações sustentam grandes mudanças — alimentação, educação, saúde e dignidade chegam onde mais importa.",
+            },
+            {
+              icon: ShieldCheck,
+              title: "ONGs verificadas",
+              text: "Trabalhamos exclusivamente com organizações regulamentadas, com CNPJ ativo e estatuto válido.",
+            },
+            {
+              icon: Sparkles,
+              title: "Conexão guiada",
+              text: "Nosso chatbot entende sua causa e indica as ONGs mais alinhadas ao seu propósito.",
+            },
+          ].map(({ icon: Icon, title, text }) => (
+            <div
+              key={title}
+              className="rounded-2xl bg-card border border-border/60 p-6"
+              style={{ boxShadow: "var(--shadow-soft)" }}
+            >
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                style={{ background: "var(--gradient-brand)" }}
+              >
+                <Icon className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </section>
+
+        <footer className="mt-16 py-8 text-center text-xs text-muted-foreground border-t border-border/60">
+          © {new Date().getFullYear()} ConnectCare — Doação com propósito e transparência.
+        </footer>
+      </main>
+
+      {/* Modal Iframe */}
+      {showForm && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-foreground/40 backdrop-blur-md animate-in fade-in"
+          onClick={() => setShowForm(false)}
+        >
+          <div
+            className="relative bg-card rounded-3xl overflow-hidden w-full max-w-md h-[85vh] max-h-[720px] shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowForm(false)}
+              aria-label="Fechar"
+              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-background/90 hover:bg-background border border-border flex items-center justify-center transition shadow-md"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <iframe
+              src="https://tally.so/r/RGZJYK"
+              title="Cadastro de ONG"
+              className="w-full h-full border-0"
+              allow="clipboard-write"
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
