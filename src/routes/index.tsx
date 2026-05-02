@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useRef, useEffect } from "react";
-import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
 import logo from "@/assets/connectcare-logo.png";
 import { Button } from "@/components/ui/button";
 
@@ -21,54 +21,61 @@ export const Route = createFileRoute("/")({
 const WEBHOOK_URL =
   "https://hook.us2.make.com/wuyc6tpiabufqfci06i4toat6vnb33qa";
 
-type Msg = { role: "user" | "bot"; text: string };
+type Donation = "" | "Roupa" | "Roupas de frio" | "Cobertores" | "Calçados" | "Alimentos";
+
+const UFS = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"];
+const DONATIONS = ["Roupa", "Roupas de frio", "Cobertores", "Calçados", "Alimentos"];
 
 function Index() {
   const [showForm, setShowForm] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<Msg[]>([
-    {
-      role: "bot",
-      text: "Olá! 👋 Sou o assistente da ConnectCare. Me conte qual causa toca o seu coração e eu indico ONGs regulamentadas para a sua doação.",
-    },
-  ]);
   const [loading, setLoading] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading]);
+  const [firstName, setFirstName] = useState("");
+  const [uf, setUf] = useState("");
+  const [city, setCity] = useState("");
+  const [cep, setCep] = useState("");
+  const [donationType, setDonationType] = useState<Donation>("");
 
-  const sendMessage = async () => {
-    const trimmed = input.trim().slice(0, 1000);
-    if (!trimmed || loading) return;
-    setMessages((m) => [...m, { role: "user", text: trimmed }]);
-    setInput("");
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(false);
+
+    const name = firstName.trim().slice(0, 60);
+    const cityT = city.trim().slice(0, 80);
+    const cepT = cep.trim().slice(0, 9);
+
+    if (!name || !uf || !cityT || !cepT || !donationType) {
+      setError("Por favor, preencha todos os campos.");
+      return;
+    }
+    if (!/^\d{5}-?\d{3}$/.test(cepT)) {
+      setError("CEP inválido. Use o formato 00000-000.");
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed, timestamp: new Date().toISOString() }),
+        body: JSON.stringify({
+          firstName: name,
+          uf,
+          city: cityT,
+          cep: cepT,
+          donationType,
+          timestamp: new Date().toISOString(),
+        }),
       });
-      const text = await res.text();
-      let reply = text;
-      try {
-        const json = JSON.parse(text);
-        reply = json.reply ?? json.message ?? json.output ?? text;
-      } catch {
-        /* texto puro */
-      }
-      setMessages((m) => [
-        ...m,
-        { role: "bot", text: reply || "Recebido! Em instantes retornarei com indicações." },
-      ]);
+      if (!res.ok) throw new Error("Falha no envio");
+      setSuccess(true);
+      setFirstName(""); setUf(""); setCity(""); setCep(""); setDonationType("");
     } catch {
-      setMessages((m) => [
-        ...m,
-        { role: "bot", text: "Não consegui conectar agora. Tente novamente em instantes." },
-      ]);
+      setError("Não foi possível enviar agora. Tente novamente em instantes.");
     } finally {
       setLoading(false);
     }
@@ -158,59 +165,102 @@ function Index() {
                 <Heart className="w-4 h-4 text-white" />
               </div>
               <div className="text-white">
-                <div className="font-semibold leading-tight">Assistente ConnectCare</div>
-                <div className="text-xs text-white/80">Online • respostas em tempo real</div>
+                <div className="font-semibold leading-tight">Quero doar</div>
+                <div className="text-xs text-white/80">Preencha seus dados e o tipo de doação</div>
               </div>
             </div>
 
-            <div ref={scrollRef} className="h-[420px] overflow-y-auto px-4 md:px-6 py-6 space-y-4 bg-muted/30">
-              {messages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-                      m.role === "user"
-                        ? "rounded-br-sm text-white"
-                        : "rounded-bl-sm bg-card text-foreground border border-border/60"
-                    }`}
-                    style={m.role === "user" ? { background: "var(--gradient-brand)" } : undefined}
+            <form onSubmit={submit} className="p-5 md:p-7 space-y-4 bg-card">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-1.5">Primeiro nome</label>
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  maxLength={60}
+                  placeholder="Ex: Maria"
+                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">UF</label>
+                  <select
+                    value={uf}
+                    onChange={(e) => setUf(e.target.value)}
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                   >
-                    {m.text}
-                  </div>
+                    <option value="">Selecione</option>
+                    {UFS.map((u) => (
+                      <option key={u} value={u}>{u}</option>
+                    ))}
+                  </select>
                 </div>
-              ))}
-              {loading && (
-                <div className="flex justify-start">
-                  <div className="px-4 py-3 rounded-2xl rounded-bl-sm bg-card border border-border/60 text-muted-foreground text-sm flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" /> Pensando...
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Cidade</label>
+                  <input
+                    type="text"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    maxLength={80}
+                    placeholder="Sua cidade"
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">CEP</label>
+                  <input
+                    type="text"
+                    value={cep}
+                    onChange={(e) => setCep(e.target.value)}
+                    maxLength={9}
+                    placeholder="00000-000"
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-1.5">Tipo de doação</label>
+                  <select
+                    value={donationType}
+                    onChange={(e) => setDonationType(e.target.value as Donation)}
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+                  >
+                    <option value="">Selecione</option>
+                    {DONATIONS.map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {error && (
+                <div className="text-sm text-destructive bg-destructive/10 border border-destructive/30 rounded-xl px-4 py-3">
+                  {error}
                 </div>
               )}
-            </div>
+              {success && (
+                <div className="text-sm text-foreground bg-secondary/40 border border-border rounded-xl px-4 py-3 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" /> Recebemos seus dados! Em breve entraremos em contato.
+                </div>
+              )}
 
-            <div className="p-3 md:p-4 border-t border-border/60 bg-card flex items-end gap-2">
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                  }
-                }}
-                placeholder="Digite sua mensagem... Ex: quero doar para causas infantis"
-                rows={1}
-                maxLength={1000}
-                className="flex-1 resize-none rounded-2xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 max-h-32"
-              />
               <Button
-                onClick={sendMessage}
-                disabled={loading || !input.trim()}
-                className="rounded-2xl h-12 px-5"
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-xl h-12 text-base font-semibold"
                 style={{ background: "var(--gradient-brand)", color: "white" }}
               >
-                <Send className="w-4 h-4" />
+                {loading ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Enviando...</>
+                ) : (
+                  <><Send className="w-4 h-4 mr-2" /> Enviar</>
+                )}
               </Button>
-            </div>
+            </form>
           </div>
         </section>
 
