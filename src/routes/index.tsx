@@ -73,6 +73,9 @@ function Index() {
     }
 
     setLoading(true);
+    setResponseText("");
+    setOngs([]);
+    setHasResponse(false);
     try {
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
@@ -87,7 +90,46 @@ function Index() {
         }),
       });
       if (!res.ok) throw new Error("Falha no envio");
-      setSuccess(true);
+
+      const raw = await res.text();
+      let payload: any = {};
+      try { payload = raw ? JSON.parse(raw) : {}; } catch { payload = {}; }
+
+      const text: string = typeof payload?.Gemini === "string" ? payload.Gemini : "";
+
+      let arr: any = payload?.Array;
+      if (typeof arr === "string") {
+        try { arr = JSON.parse(arr); } catch { arr = null; }
+      }
+
+      const mapOng = (o: any) => ({
+        name: o?.["4"],
+        phone: o?.["5"],
+        cnpj: o?.["10"],
+        address: o?.["22"],
+        days: o?.["23"],
+        hours: o?.["31"],
+      });
+
+      let list: any[] = [];
+      if (Array.isArray(arr)) {
+        list = arr.map(mapOng);
+      } else if (arr && typeof arr === "object") {
+        // Could be a single ONG ({"4":..,"5":..}) or a map of ONGs ({"1":{..},"2":{..}})
+        const values = Object.values(arr);
+        const allObjects = values.length > 0 && values.every((v) => v && typeof v === "object");
+        if (allObjects) {
+          list = (values as any[]).map(mapOng);
+        } else {
+          list = [mapOng(arr)];
+        }
+      }
+
+      list = list.filter((o) => o.name || o.phone || o.address).slice(0, 5);
+
+      setResponseText(text);
+      setOngs(list);
+      setHasResponse(true);
       setFirstName(""); setUf(""); setCity(""); setCep(""); setDonationType("");
     } catch {
       setError("Não foi possível enviar agora. Tente novamente em instantes.");
