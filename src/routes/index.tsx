@@ -57,7 +57,7 @@ function Index() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setSuccess(false);
+    setHasResponse(false);
 
     const name = firstName.trim().slice(0, 60);
     const cityT = city.trim().slice(0, 80);
