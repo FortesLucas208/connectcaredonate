@@ -30,8 +30,10 @@ function Index() {
   const [showForm, setShowForm] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [responseText, setResponseText] = useState<string>("");
+  const [ongs, setOngs] = useState<Array<{ name?: string; phone?: string; cnpj?: string; address?: string; days?: string; hours?: string }>>([]);
+  const [hasResponse, setHasResponse] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [uf, setUf] = useState("");
