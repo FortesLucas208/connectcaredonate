@@ -304,9 +304,52 @@ function Index() {
                   {error}
                 </div>
               )}
-              {success && (
-                <div className="text-sm text-foreground bg-secondary/40 border border-border rounded-xl px-4 py-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" /> Recebemos seus dados! Em breve entraremos em contato.
+              {hasResponse && (
+                <div className="space-y-4">
+                  <div className="text-sm text-foreground bg-secondary/40 border border-border rounded-xl px-4 py-3 flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
+                    <p className="whitespace-pre-line leading-relaxed">
+                      {responseText || "Recebemos seus dados! Em breve entraremos em contato."}
+                    </p>
+                  </div>
+
+                  {ongs.length > 0 ? (
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-foreground">
+                        ONGs encontradas ({ongs.length})
+                      </h4>
+                      {ongs.map((o, i) => (
+                        <div
+                          key={i}
+                          className="rounded-xl border border-border bg-background p-4 space-y-1.5"
+                          style={{ boxShadow: "var(--shadow-soft)" }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
+                              style={{ background: "var(--gradient-brand)" }}
+                            >
+                              {i + 1}
+                            </div>
+                            <div className="font-semibold text-foreground text-sm">
+                              {o.name || "ONG"}
+                            </div>
+                          </div>
+                          <div className="text-xs text-muted-foreground space-y-1 pl-9">
+                            {o.phone && <div><strong className="text-foreground">Telefone:</strong> {o.phone}</div>}
+                            {o.cnpj && <div><strong className="text-foreground">CNPJ:</strong> {o.cnpj}</div>}
+                            {o.address && <div><strong className="text-foreground">Endereço:</strong> {o.address}</div>}
+                            {o.days && <div><strong className="text-foreground">Dias:</strong> {o.days}</div>}
+                            {o.hours && <div><strong className="text-foreground">Horário:</strong> {o.hours}</div>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground bg-muted/40 border border-border rounded-xl px-4 py-3">
+                      Nenhuma ONG encontrada no momento para os critérios informados.
+                    </div>
+                  )}
                 </div>
               )}
 
