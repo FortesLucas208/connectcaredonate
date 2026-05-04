@@ -99,7 +99,14 @@ function Index() {
 
       let arr: any = payload?.Array;
       if (typeof arr === "string") {
-        try { arr = JSON.parse(arr); } catch { arr = null; }
+        const s = arr.trim();
+        const tryParse = (v: string) => { try { return JSON.parse(v); } catch { return undefined; } };
+        let parsed: any = tryParse(s);
+        if (parsed === undefined && s) {
+          // Webhook may send "{...}, {...}" — wrap into a JSON array
+          parsed = tryParse(`[${s}]`);
+        }
+        arr = parsed ?? null;
       }
 
       const mapOng = (o: any) => ({
