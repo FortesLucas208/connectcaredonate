@@ -30,8 +30,10 @@ function Index() {
   const [showForm, setShowForm] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [responseText, setResponseText] = useState<string>("");
+  const [ongs, setOngs] = useState<Array<{ name?: string; phone?: string; cnpj?: string; address?: string; days?: string; hours?: string }>>([]);
+  const [hasResponse, setHasResponse] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [uf, setUf] = useState("");
@@ -55,7 +57,7 @@ function Index() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setSuccess(false);
+    setHasResponse(false);
 
     const name = firstName.trim().slice(0, 60);
     const cityT = city.trim().slice(0, 80);
@@ -71,6 +73,9 @@ function Index() {
     }
 
     setLoading(true);
+    setResponseText("");
+    setOngs([]);
+    setHasResponse(false);
     try {
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
@@ -85,7 +90,46 @@ function Index() {
         }),
       });
       if (!res.ok) throw new Error("Falha no envio");
-      setSuccess(true);
+
+      const raw = await res.text();
+      let payload: any = {};
+      try { payload = raw ? JSON.parse(raw) : {}; } catch { payload = {}; }
+
+      const text: string = typeof payload?.Gemini === "string" ? payload.Gemini : "";
+
+      let arr: any = payload?.Array;
+      if (typeof arr === "string") {
+        try { arr = JSON.parse(arr); } catch { arr = null; }
+      }
+
+      const mapOng = (o: any) => ({
+        name: o?.["4"],
+        phone: o?.["5"],
+        cnpj: o?.["10"],
+        address: o?.["22"],
+        days: o?.["23"],
+        hours: o?.["31"],
+      });
+
+      let list: any[] = [];
+      if (Array.isArray(arr)) {
+        list = arr.map(mapOng);
+      } else if (arr && typeof arr === "object") {
+        // Could be a single ONG ({"4":..,"5":..}) or a map of ONGs ({"1":{..},"2":{..}})
+        const values = Object.values(arr);
+        const allObjects = values.length > 0 && values.every((v) => v && typeof v === "object");
+        if (allObjects) {
+          list = (values as any[]).map(mapOng);
+        } else {
+          list = [mapOng(arr)];
+        }
+      }
+
+      list = list.filter((o) => o.name || o.phone || o.address).slice(0, 5);
+
+      setResponseText(text);
+      setOngs(list);
+      setHasResponse(true);
       setFirstName(""); setUf(""); setCity(""); setCep(""); setDonationType("");
     } catch {
       setError("Não foi possível enviar agora. Tente novamente em instantes.");
@@ -260,9 +304,52 @@ function Index() {
                   {error}
                 </div>
               )}
-              {success && (
-                <div className="text-sm text-foreground bg-secondary/40 border border-border rounded-xl px-4 py-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" /> Recebemos seus dados! Em breve entraremos em contato.
+              {hasResponse && (
+                <div className="space-y-4">
+                  <div className="text-sm text-foreground bg-secondary/40 border border-border rounded-xl px-4 py-3 flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
+                    <p className="whitespace-pre-line leading-relaxed">
+                      {responseText || "Recebemos seus dados! Em breve entraremos em contato."}
+                    </p>
+                  </div>
+
+                  {ongs.length > 0 ? (
+                    <div className="space-y-3">
+                      <h4 className="text-sm font-semibold text-foreground">
+                        ONGs encontradas ({ongs.length})
+                      </h4>
+                      {ongs.map((o, i) => (
+                        <div
+                          key={i}
+                          className="rounded-xl border border-border bg-background p-4 space-y-1.5"
+                          style={{ boxShadow: "var(--shadow-soft)" }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
+                              style={{ background: "var(--gradient-brand)" }}
+                            >
+                              {i + 1}
+                            </div>
+                            <div className="font-semibold text-foreground text-sm">
+                              {o.name || "ONG"}
+                            </div>
+                          </div>
+                          <div className="text-xs text-muted-foreground space-y-1 pl-9">
+                            {o.phone && <div><strong className="text-foreground">Telefone:</strong> {o.phone}</div>}
+                            {o.cnpj && <div><strong className="text-foreground">CNPJ:</strong> {o.cnpj}</div>}
+                            {o.address && <div><strong className="text-foreground">Endereço:</strong> {o.address}</div>}
+                            {o.days && <div><strong className="text-foreground">Dias:</strong> {o.days}</div>}
+                            {o.hours && <div><strong className="text-foreground">Horário:</strong> {o.hours}</div>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-muted-foreground bg-muted/40 border border-border rounded-xl px-4 py-3">
+                      Nenhuma ONG encontrada no momento para os critérios informados.
+                    </div>
+                  )}
                 </div>
               )}
 
