@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
 import logo from "@/assets/connectcare-logo.png";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,19 @@ function Index() {
   const [city, setCity] = useState("");
   const [cep, setCep] = useState("");
   const [donationType, setDonationType] = useState<Donation>("");
+  const [cities, setCities] = useState<string[]>([]);
+  const [loadingCities, setLoadingCities] = useState(false);
+
+  useEffect(() => {
+    if (!uf) { setCities([]); setCity(""); return; }
+    setLoadingCities(true);
+    setCity("");
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`)
+      .then((r) => r.json())
+      .then((data: Array<{ nome: string }>) => setCities(data.map((c) => c.nome)))
+      .catch(() => setCities([]))
+      .finally(() => setLoadingCities(false));
+  }, [uf]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -199,14 +212,19 @@ function Index() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-1.5">Cidade</label>
-                  <input
-                    type="text"
+                  <select
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    maxLength={80}
-                    placeholder="Sua cidade"
-                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-                  />
+                    disabled={!uf || loadingCities}
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
+                  >
+                    <option value="">
+                      {!uf ? "Selecione a UF primeiro" : loadingCities ? "Carregando..." : "Selecione"}
+                    </option>
+                    {cities.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
