@@ -1,10 +1,3 @@
-<!--
-  ConnectCare — Template de E-mail
-  Como usar:
-   - Substitua {{NOME}} pelo nome do destinatário
-   - Substitua {{MENSAGEM}} pelo conteúdo do e-mail (pode conter <br> ou <p>)
-   - Substitua {{LINK_SITE}} pela URL do site (padrão: https://connectcaredonate.lovable.app)
--->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -34,11 +27,14 @@
           <tr>
             <td style="padding:40px 32px 24px;">
               <h2 style="margin:0 0 16px;color:#1f3247;font-size:22px;font-weight:600;">
-                Olá, {{NOME}}!
+                Olá, {{1.fields.`Informações do responsável`}}!
               </h2>
-              <div style="color:#4a6278;font-size:16px;line-height:1.6;">
-                {{MENSAGEM}}
-              </div>
+              <p style="color:#4a6278;font-size:16px;line-height:1.6;">
+Informamos que o cadastro da sua ONG foi feito com sucesso e já está ativo em nossa lista de recomendações para pesquisas futuras!
+</p>
+<p style="color:#4a6278;font-size:16px;line-height:1.6;">
+  <strong>Importante!</strong><br> Não intermediampos o contato entre doador/ong! O doador entrará em contato diretamente pelos telefones informados no cadastro.
+</p>
             </td>
           </tr>
 
@@ -48,7 +44,7 @@
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
                 <tr>
                   <td style="background:linear-gradient(135deg,#7ec5e6 0%,#92d5b3 100%);border-radius:12px;">
-                    <a href="{{LINK_SITE}}"
+                    <a href="https://connectcaredonate.lovable.app"
                        style="display:inline-block;padding:14px 36px;color:#ffffff;font-size:16px;font-weight:600;text-decoration:none;border-radius:12px;">
                       Acessar o site
                     </a>
@@ -65,6 +61,21 @@
             </td>
           </tr>
 
+          <tr>
+            <td style="padding:24px 32px 32px;">
+              <p style="margin:0;color:#7d92a6;font-size:15px;line-height:1.5;">
+                <strong>Atenciosamente,<br/>
+                Equipe ConnectCare.</strong>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:0 32px;">
+              <div style="border-top:1px solid #e4eef5;"></div>
+            </td>
+          </tr>
+
           <!-- Footer -->
           <tr>
             <td style="padding:24px 32px 32px;text-align:center;">
@@ -74,6 +85,9 @@
               </p>
             </td>
           </tr>
+
+          
+
 
         </table>
       </td>
