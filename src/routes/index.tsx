@@ -154,10 +154,10 @@ function Index() {
             <img src={logo} alt="ConnectCare" className="h-10 md:h-12 w-auto" />
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#por-que-doar" className="hover:text-foreground transition">Por que doar</a>
-            <a href="#pilares" className="hover:text-foreground transition">Pilares</a>
             <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
             <a href="#chat" className="hover:text-foreground transition">Buscar ONGs</a>
+            <a href="#por-que-doar" className="hover:text-foreground transition">Por que doar</a>
+            <a href="#pilares" className="hover:text-foreground transition">Pilares</a>
             
             <Button
               onClick={() => setShowForm(true)}
@@ -177,10 +177,10 @@ function Index() {
         </div>
         {menuOpen && (
           <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
-            <a href="#por-que-doar" onClick={() => setMenuOpen(false)} className="text-sm">Por que doar</a>
-            <a href="#pilares" onClick={() => setMenuOpen(false)} className="text-sm">Pilares</a>
             <a href="#como-funciona" onClick={() => setMenuOpen(false)} className="text-sm">Como funciona</a>
             <a href="#chat" onClick={() => setMenuOpen(false)} className="text-sm">Buscar ONGs</a>
+            <a href="#por-que-doar" onClick={() => setMenuOpen(false)} className="text-sm">Por que doar</a>
+            <a href="#pilares" onClick={() => setMenuOpen(false)} className="text-sm">Pilares</a>
             
             <Button
               onClick={() => { setShowForm(true); setMenuOpen(false); }}
