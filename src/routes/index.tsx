@@ -155,6 +155,7 @@ function Index() {
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
+            <a href="#por-que-doar" className="hover:text-foreground transition">Por que doar</a>
             <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
             <a href="#chat" className="hover:text-foreground transition">Conversar</a>
             <a href="#regulamentadas" className="hover:text-foreground transition">ONGs</a>
@@ -177,6 +178,7 @@ function Index() {
         {menuOpen && (
           <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
             <a href="#sobre" onClick={() => setMenuOpen(false)} className="text-sm">Sobre</a>
+            <a href="#por-que-doar" onClick={() => setMenuOpen(false)} className="text-sm">Por que doar</a>
             <a href="#como-funciona" onClick={() => setMenuOpen(false)} className="text-sm">Como funciona</a>
             <a href="#chat" onClick={() => setMenuOpen(false)} className="text-sm">Conversar</a>
             <a href="#regulamentadas" onClick={() => setMenuOpen(false)} className="text-sm">ONGs</a>
@@ -381,9 +383,9 @@ function Index() {
         <section id="regulamentadas" className="mt-16 grid md:grid-cols-3 gap-5">
           {[
             {
-              icon: Heart,
-              title: "Por que doar?",
-              text: "Pequenas doações sustentam grandes mudanças — alimentação, educação, saúde e dignidade chegam onde mais importa.",
+              icon: HandHeart,
+              title: "Impacto direto",
+              text: "Sua doação vai direto a quem precisa, sem intermediários — você acompanha de perto a transformação que ajudou a criar.",
             },
             {
               icon: ShieldCheck,
