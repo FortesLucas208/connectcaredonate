@@ -155,6 +155,7 @@ function Index() {
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
+            <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
             <a href="#chat" className="hover:text-foreground transition">Conversar</a>
             <a href="#regulamentadas" className="hover:text-foreground transition">ONGs</a>
             <Button
