@@ -157,7 +157,7 @@ function Index() {
             <a href="#por-que-doar" className="hover:text-foreground transition">Por que doar</a>
             <a href="#pilares" className="hover:text-foreground transition">Pilares</a>
             <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
-            <a href="#chat" className="hover:text-foreground transition">Conversar</a>
+            <a href="#chat" className="hover:text-foreground transition">Buscar ONGs</a>
             <a href="#regulamentadas" className="hover:text-foreground transition">ONGs</a>
             <Button
               onClick={() => setShowForm(true)}
