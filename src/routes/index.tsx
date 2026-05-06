@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
+import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2, ClipboardList, Search, HandHeart } from "lucide-react";
 import logo from "@/assets/connectcare-logo.png";
 import { Button } from "@/components/ui/button";
 
