@@ -466,9 +466,9 @@ function Index() {
               text: "Trabalhamos exclusivamente com organizações regulamentadas, com CNPJ ativo e estatuto válido.",
             },
             {
-              icon: Sparkles,
-              title: "Conexão guiada",
-              text: "Nosso chatbot entende sua causa e indica as ONGs mais alinhadas ao seu propósito.",
+              icon: Search,
+              title: "Busca por região",
+              text: "Encontramos ONGs próximas de você, considerando sua cidade e estado para uma doação prática e local.",
             },
           ].map(({ icon: Icon, title, text }) => (
             <div
