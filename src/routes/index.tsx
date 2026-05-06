@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2, ClipboardList, Search, HandHeart } from "lucide-react";
+import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2, ClipboardList, Search, HandHeart, Eye, Zap } from "lucide-react";
 import logo from "@/assets/connectcare-logo.png";
 import { Button } from "@/components/ui/button";
 
@@ -156,6 +156,7 @@ function Index() {
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
             <a href="#por-que-doar" className="hover:text-foreground transition">Por que doar</a>
+            <a href="#pilares" className="hover:text-foreground transition">Pilares</a>
             <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
             <a href="#chat" className="hover:text-foreground transition">Conversar</a>
             <a href="#regulamentadas" className="hover:text-foreground transition">ONGs</a>
@@ -179,6 +180,7 @@ function Index() {
           <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
             <a href="#sobre" onClick={() => setMenuOpen(false)} className="text-sm">Sobre</a>
             <a href="#por-que-doar" onClick={() => setMenuOpen(false)} className="text-sm">Por que doar</a>
+            <a href="#pilares" onClick={() => setMenuOpen(false)} className="text-sm">Pilares</a>
             <a href="#como-funciona" onClick={() => setMenuOpen(false)} className="text-sm">Como funciona</a>
             <a href="#chat" onClick={() => setMenuOpen(false)} className="text-sm">Conversar</a>
             <a href="#regulamentadas" onClick={() => setMenuOpen(false)} className="text-sm">ONGs</a>
@@ -477,6 +479,61 @@ function Index() {
                 </li>
               ))}
             </ol>
+          </div>
+        </section>
+
+        {/* Nossos Pilares */}
+        <section id="pilares" className="scroll-mt-24 mt-16 md:mt-20">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-medium mb-4">
+              <Sparkles className="w-3.5 h-3.5" /> Nossos valores
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+              Nossos{" "}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: "var(--gradient-brand)" }}
+              >
+                Pilares
+              </span>
+            </h2>
+            <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+              Os princípios que sustentam cada conexão feita pela ConnectCare.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Eye,
+                title: "Transparência",
+                text: "Mostramos com clareza quem são as ONGs, como atuam e o destino de cada doação — sem letras miúdas.",
+              },
+              {
+                icon: Zap,
+                title: "Agilidade",
+                text: "Conexões rápidas entre você e a ONG certa, para que a ajuda chegue no momento em que mais importa.",
+              },
+              {
+                icon: HandHeart,
+                title: "Comprometimento",
+                text: "Cuidamos de cada cadastro, cada conversa e cada doação como se fosse nossa — com responsabilidade real.",
+              },
+            ].map(({ icon: Icon, title, text }) => (
+              <div
+                key={title}
+                className="rounded-2xl bg-card border border-border/60 p-6"
+                style={{ boxShadow: "var(--shadow-soft)" }}
+              >
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                  style={{ background: "var(--gradient-brand)" }}
+                >
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
+              </div>
+            ))}
           </div>
         </section>
 
