@@ -417,47 +417,66 @@ function Index() {
 
         {/* Por que doar */}
         <section id="por-que-doar" className="mt-16 md:mt-20">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-              Por que doar?
-            </h2>
-            <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-              Pequenas doações sustentam grandes mudanças — alimentação, educação, saúde e dignidade chegam onde mais importa.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              {
-                icon: Heart,
-                title: "Transforma vidas",
-                text: "Cada peça de roupa, alimento ou cobertor doado representa acolhimento, saúde e dignidade para quem mais precisa.",
-              },
-              {
-                icon: Sparkles,
-                title: "Fortalece comunidades",
-                text: "Apoiar ONGs locais sustenta projetos contínuos de educação, assistência e cidadania nos bairros que mais precisam.",
-              },
-              {
-                icon: ShieldCheck,
-                title: "Reduz desperdício",
-                text: "O que não usamos mais pode ser essencial para outra família. Doar é dar um novo propósito ao que já existe.",
-              },
-            ].map(({ icon: Icon, title, text }) => (
-              <div
-                key={title}
-                className="rounded-2xl bg-card border border-border/60 p-6"
-                style={{ boxShadow: "var(--shadow-soft)" }}
-              >
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: "var(--gradient-brand)" }}
-                >
-                  <Icon className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
+          <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-5 md:sticky md:top-24">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/40 text-xs font-medium text-foreground mb-4">
+                <Heart className="w-3.5 h-3.5" /> Propósito
               </div>
-            ))}
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-tight">
+                Por que{" "}
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundImage: "var(--gradient-brand)" }}
+                >
+                  doar?
+                </span>
+              </h2>
+              <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed">
+                Doar não é apenas dar — é reconhecer que o que sobra para nós pode ser tudo
+                para alguém. É um gesto que carrega afeto, atravessa histórias e devolve
+                dignidade onde ela faltava.
+              </p>
+            </div>
+
+            <ol className="md:col-span-7 divide-y divide-border/60">
+              {[
+                {
+                  icon: Heart,
+                  title: "Transforma vidas",
+                  text: "Cada peça de roupa, alimento ou cobertor doado representa acolhimento, saúde e dignidade para quem mais precisa.",
+                },
+                {
+                  icon: Sparkles,
+                  title: "Fortalece comunidades",
+                  text: "Apoiar ONGs locais sustenta projetos contínuos de educação, assistência e cidadania nos bairros que mais precisam.",
+                },
+                {
+                  icon: ShieldCheck,
+                  title: "Reduz desperdício",
+                  text: "O que não usamos mais pode ser essencial para outra família. Doar é dar um novo propósito ao que já existe.",
+                },
+              ].map(({ icon: Icon, title, text }, i) => (
+                <li key={title} className="flex gap-5 py-6 first:pt-0 last:pb-0 group">
+                  <div className="shrink-0 flex flex-col items-center gap-2">
+                    <span
+                      className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent tabular-nums"
+                      style={{ backgroundImage: "var(--gradient-brand)" }}
+                    >
+                      0{i + 1}
+                    </span>
+                    <Icon className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition" />
+                  </div>
+                  <div className="flex-1 pt-1">
+                    <h3 className="text-lg md:text-xl font-semibold text-foreground mb-1.5">
+                      {title}
+                    </h3>
+                    <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                      {text}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
