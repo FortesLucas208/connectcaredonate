@@ -150,11 +150,10 @@ function Index() {
       {/* Header */}
       <header className="sticky top-0 z-30 backdrop-blur-md bg-background/70 border-b border-border/60">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <a href="#sobre" aria-label="Ir para o início" className="flex items-center gap-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40">
             <img src={logo} alt="ConnectCare" className="h-10 md:h-12 w-auto" />
-          </div>
+          </a>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
             <a href="#por-que-doar" className="hover:text-foreground transition">Por que doar</a>
             <a href="#pilares" className="hover:text-foreground transition">Pilares</a>
             <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
@@ -178,7 +177,6 @@ function Index() {
         </div>
         {menuOpen && (
           <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
-            <a href="#sobre" onClick={() => setMenuOpen(false)} className="text-sm">Sobre</a>
             <a href="#por-que-doar" onClick={() => setMenuOpen(false)} className="text-sm">Por que doar</a>
             <a href="#pilares" onClick={() => setMenuOpen(false)} className="text-sm">Pilares</a>
             <a href="#como-funciona" onClick={() => setMenuOpen(false)} className="text-sm">Como funciona</a>
