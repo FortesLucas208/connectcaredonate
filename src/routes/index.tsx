@@ -557,57 +557,78 @@ function Index() {
 
         {/* Nossos Pilares */}
         <section id="pilares" className="scroll-mt-24 mt-16 md:mt-20">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-medium mb-4">
-              <Sparkles className="w-3.5 h-3.5" /> Nossos valores
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-              Nossos{" "}
-              <span
-                className="bg-clip-text text-transparent"
-                style={{ backgroundImage: "var(--gradient-brand)" }}
-              >
-                Pilares
-              </span>
-            </h2>
-            <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-              Os princípios que sustentam cada conexão feita pela ConnectCare.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              {
-                icon: Eye,
-                title: "Transparência",
-                text: "Mostramos com clareza quem são as ONGs, como atuam e o destino de cada doação — sem letras miúdas.",
-              },
-              {
-                icon: Zap,
-                title: "Agilidade",
-                text: "Conexões rápidas entre você e a ONG certa, para que a ajuda chegue no momento em que mais importa.",
-              },
-              {
-                icon: HandHeart,
-                title: "Comprometimento",
-                text: "Cuidamos de cada cadastro, cada conversa e cada doação como se fosse nossa — com responsabilidade real.",
-              },
-            ].map(({ icon: Icon, title, text }) => (
-              <div
-                key={title}
-                className="rounded-2xl bg-card border border-border/60 p-6"
-                style={{ boxShadow: "var(--shadow-soft)" }}
-              >
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: "var(--gradient-brand)" }}
-                >
-                  <Icon className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
+          <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-5 md:sticky md:top-24">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-medium mb-4">
+                <Sparkles className="w-3.5 h-3.5" /> Nossos valores
               </div>
-            ))}
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-tight">
+                Nossos{" "}
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundImage: "var(--gradient-brand)" }}
+                >
+                  Pilares
+                </span>
+              </h2>
+              <p className="mt-4 text-sm md:text-base text-muted-foreground leading-relaxed">
+                Os princípios que sustentam cada conexão feita pela ConnectCare —
+                guiando como nos relacionamos com doadores, ONGs e com cada história envolvida.
+              </p>
+            </div>
+
+            <dl className="md:col-span-7 space-y-8">
+              {[
+                {
+                  icon: Eye,
+                  title: "Transparência",
+                  text: "Mostramos com clareza quem são as ONGs, como atuam e o destino de cada doação — sem letras miúdas.",
+                },
+                {
+                  icon: Zap,
+                  title: "Agilidade",
+                  text: "Conexões rápidas entre você e a ONG certa, para que a ajuda chegue no momento em que mais importa.",
+                },
+                {
+                  icon: HandHeart,
+                  title: "Comprometimento",
+                  text: "Cuidamos de cada cadastro, cada conversa e cada doação como se fosse nossa — com responsabilidade real.",
+                },
+              ].map(({ icon: Icon, title, text }) => (
+                <div
+                  key={title}
+                  className="group relative pl-6 border-l-2 border-border/60 hover:border-transparent transition"
+                >
+                  <span
+                    aria-hidden
+                    className="absolute left-[-2px] top-0 h-full w-0.5 origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500"
+                    style={{ background: "var(--gradient-brand)" }}
+                  />
+                  <dt className="flex items-center gap-3 mb-2">
+                    <Icon
+                      className="w-5 h-5 bg-clip-text text-transparent"
+                      style={{ color: "transparent", stroke: "url(#pilar-grad)" }}
+                    />
+                    <span className="text-xl md:text-2xl font-semibold text-foreground">
+                      {title}
+                    </span>
+                  </dt>
+                  <dd className="text-sm md:text-base text-muted-foreground leading-relaxed">
+                    {text}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
+          {/* svg defs para gradiente nos ícones */}
+          <svg width="0" height="0" className="absolute">
+            <defs>
+              <linearGradient id="pilar-grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="oklch(0.78 0.09 230)" />
+                <stop offset="100%" stopColor="oklch(0.82 0.1 160)" />
+              </linearGradient>
+            </defs>
+          </svg>
         </section>
 
         <footer className="mt-16 py-8 text-center text-xs text-muted-foreground border-t border-border/60">
