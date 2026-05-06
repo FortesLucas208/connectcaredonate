@@ -222,56 +222,74 @@ function Index() {
         </section>
         {/* Como funciona */}
         <section id="como-funciona" className="scroll-mt-24 mt-12 md:mt-16">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
-              Como funciona
+          <div className="max-w-2xl mb-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/40 text-xs font-medium text-foreground mb-4">
+              <ClipboardList className="w-3.5 h-3.5" /> Passo a passo
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground leading-tight">
+              Como{" "}
+              <span
+                className="bg-clip-text text-transparent"
+                style={{ backgroundImage: "var(--gradient-brand)" }}
+              >
+                funciona
+              </span>
             </h2>
             <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
               Em apenas 3 passos você conecta sua doação a quem realmente precisa.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {[
-              {
-                icon: ClipboardList,
-                step: "01",
-                title: "Preencha seus dados",
-                text: "Informe seu nome, localização e o tipo de doação que deseja realizar.",
-              },
-              {
-                icon: Search,
-                step: "02",
-                title: "Encontramos ONGs",
-                text: "Nosso assistente busca ONGs regulamentadas próximas e alinhadas à sua doação.",
-              },
-              {
-                icon: HandHeart,
-                step: "03",
-                title: "Doe com propósito",
-                text: "Entre em contato com a ONG escolhida e entregue sua doação com segurança.",
-              },
-            ].map(({ icon: Icon, step, title, text }) => (
-              <div
-                key={step}
-                className="relative rounded-2xl bg-card border border-border/60 p-6"
-                style={{ boxShadow: "var(--shadow-soft)" }}
-              >
-                <div
-                  className="absolute -top-3 -right-3 w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                  style={{ background: "var(--gradient-brand)" }}
-                >
-                  {step}
-                </div>
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: "var(--gradient-brand)" }}
-                >
-                  <Icon className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
-              </div>
-            ))}
+
+          <div className="relative">
+            {/* linha conectora */}
+            <div
+              aria-hidden
+              className="hidden md:block absolute top-6 left-[8%] right-[8%] h-px"
+              style={{ background: "var(--gradient-brand)", opacity: 0.35 }}
+            />
+            <ol className="grid md:grid-cols-3 gap-10 md:gap-6 relative">
+              {[
+                {
+                  icon: ClipboardList,
+                  step: "01",
+                  title: "Preencha seus dados",
+                  text: "Informe seu nome, localização e o tipo de doação que deseja realizar.",
+                },
+                {
+                  icon: Search,
+                  step: "02",
+                  title: "Encontramos ONGs",
+                  text: "Nosso assistente busca ONGs regulamentadas próximas e alinhadas à sua doação.",
+                },
+                {
+                  icon: HandHeart,
+                  step: "03",
+                  title: "Doe com propósito",
+                  text: "Entre em contato com a ONG escolhida e entregue sua doação com segurança.",
+                },
+              ].map(({ icon: Icon, step, title, text }) => (
+                <li key={step} className="relative flex flex-col items-start group">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-md ring-4 ring-background relative z-10"
+                    style={{ background: "var(--gradient-brand)" }}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span
+                    className="mt-4 text-xs font-semibold tracking-[0.2em] bg-clip-text text-transparent"
+                    style={{ backgroundImage: "var(--gradient-brand)" }}
+                  >
+                    PASSO {step}
+                  </span>
+                  <h3 className="mt-1 text-lg md:text-xl font-semibold text-foreground">
+                    {title}
+                  </h3>
+                  <p className="mt-2 text-sm md:text-base text-muted-foreground leading-relaxed">
+                    {text}
+                  </p>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
