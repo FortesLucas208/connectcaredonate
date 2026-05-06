@@ -177,7 +177,6 @@ function Index() {
         </div>
         {menuOpen && (
           <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
-            <a href="#sobre" onClick={() => setMenuOpen(false)} className="text-sm">Sobre</a>
             <a href="#por-que-doar" onClick={() => setMenuOpen(false)} className="text-sm">Por que doar</a>
             <a href="#pilares" onClick={() => setMenuOpen(false)} className="text-sm">Pilares</a>
             <a href="#como-funciona" onClick={() => setMenuOpen(false)} className="text-sm">Como funciona</a>
