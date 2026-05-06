@@ -220,6 +220,61 @@ function Index() {
             Apenas ONGs <strong className="font-semibold">regulamentadas</strong> são cadastradas em nossa rede.
           </div>
         </section>
+        {/* Como funciona */}
+        <section id="como-funciona" className="scroll-mt-24 mt-12 md:mt-16">
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+              Como funciona
+            </h2>
+            <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+              Em apenas 3 passos você conecta sua doação a quem realmente precisa.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: ClipboardList,
+                step: "01",
+                title: "Preencha seus dados",
+                text: "Informe seu nome, localização e o tipo de doação que deseja realizar.",
+              },
+              {
+                icon: Search,
+                step: "02",
+                title: "Encontramos ONGs",
+                text: "Nosso assistente busca ONGs regulamentadas próximas e alinhadas à sua doação.",
+              },
+              {
+                icon: HandHeart,
+                step: "03",
+                title: "Doe com propósito",
+                text: "Entre em contato com a ONG escolhida e entregue sua doação com segurança.",
+              },
+            ].map(({ icon: Icon, step, title, text }) => (
+              <div
+                key={step}
+                className="relative rounded-2xl bg-card border border-border/60 p-6"
+                style={{ boxShadow: "var(--shadow-soft)" }}
+              >
+                <div
+                  className="absolute -top-3 -right-3 w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                  style={{ background: "var(--gradient-brand)" }}
+                >
+                  {step}
+                </div>
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                  style={{ background: "var(--gradient-brand)" }}
+                >
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Chat */}
         <section id="chat" className="scroll-mt-24 mt-12 md:mt-16">
           <div
