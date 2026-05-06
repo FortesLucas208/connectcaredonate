@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
+import { Heart, Send, X, Menu, ShieldCheck, Sparkles, Loader2, CheckCircle2, ClipboardList, Search, HandHeart } from "lucide-react";
 import logo from "@/assets/connectcare-logo.png";
 import { Button } from "@/components/ui/button";
 
@@ -155,6 +155,7 @@ function Index() {
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
+            <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
             <a href="#chat" className="hover:text-foreground transition">Conversar</a>
             <a href="#regulamentadas" className="hover:text-foreground transition">ONGs</a>
             <Button
@@ -176,6 +177,7 @@ function Index() {
         {menuOpen && (
           <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
             <a href="#sobre" onClick={() => setMenuOpen(false)} className="text-sm">Sobre</a>
+            <a href="#como-funciona" onClick={() => setMenuOpen(false)} className="text-sm">Como funciona</a>
             <a href="#chat" onClick={() => setMenuOpen(false)} className="text-sm">Conversar</a>
             <a href="#regulamentadas" onClick={() => setMenuOpen(false)} className="text-sm">ONGs</a>
             <Button
@@ -212,6 +214,61 @@ function Index() {
           <div className="mt-6 inline-flex items-center gap-2 text-sm text-secondary-foreground bg-secondary/40 px-4 py-2 rounded-full">
             <ShieldCheck className="w-4 h-4" />
             Apenas ONGs <strong className="font-semibold">regulamentadas</strong> são cadastradas em nossa rede.
+          </div>
+        </section>
+
+        {/* Como funciona */}
+        <section id="como-funciona" className="mt-16 md:mt-20">
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+              Como funciona
+            </h2>
+            <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+              Em apenas 3 passos você conecta sua doação a quem realmente precisa.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: ClipboardList,
+                step: "01",
+                title: "Preencha seus dados",
+                text: "Informe seu nome, localização e o tipo de doação que deseja realizar.",
+              },
+              {
+                icon: Search,
+                step: "02",
+                title: "Encontramos ONGs",
+                text: "Nosso assistente busca ONGs regulamentadas próximas e alinhadas à sua doação.",
+              },
+              {
+                icon: HandHeart,
+                step: "03",
+                title: "Doe com propósito",
+                text: "Entre em contato com a ONG escolhida e entregue sua doação com segurança.",
+              },
+            ].map(({ icon: Icon, step, title, text }) => (
+              <div
+                key={step}
+                className="relative rounded-2xl bg-card border border-border/60 p-6"
+                style={{ boxShadow: "var(--shadow-soft)" }}
+              >
+                <div
+                  className="absolute -top-3 -right-3 w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                  style={{ background: "var(--gradient-brand)" }}
+                >
+                  {step}
+                </div>
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                  style={{ background: "var(--gradient-brand)" }}
+                >
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
+              </div>
+            ))}
           </div>
         </section>
 
