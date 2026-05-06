@@ -195,7 +195,7 @@ function Index() {
 
       <main className="max-w-5xl mx-auto px-4 py-10 md:py-14">
         {/* Hero */}
-        <section id="sobre" className="text-center max-w-3xl mx-auto">
+        <section id="sobre" className="scroll-mt-24 text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-xs font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5" /> Doação consciente, conexão real
           </div>
@@ -219,7 +219,7 @@ function Index() {
           </div>
         </section>
         {/* Chat */}
-        <section id="chat" className="mt-12 md:mt-16">
+        <section id="chat" className="scroll-mt-24 mt-12 md:mt-16">
           <div
             className="rounded-3xl bg-card border border-border/60 overflow-hidden"
             style={{ boxShadow: "var(--shadow-soft)" }}
@@ -380,7 +380,7 @@ function Index() {
         </section>
 
         {/* Info */}
-        <section id="regulamentadas" className="mt-16 grid md:grid-cols-3 gap-5">
+        <section id="regulamentadas" className="scroll-mt-24 mt-16 grid md:grid-cols-3 gap-5">
           {[
             {
               icon: HandHeart,
@@ -416,7 +416,7 @@ function Index() {
         </section>
 
         {/* Por que doar */}
-        <section id="por-que-doar" className="mt-16 md:mt-20">
+        <section id="por-que-doar" className="scroll-mt-24 mt-16 md:mt-20">
           <div className="grid md:grid-cols-12 gap-8 md:gap-12 items-start">
             <div className="md:col-span-5 md:sticky md:top-24">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/40 text-xs font-medium text-foreground mb-4">
@@ -481,7 +481,7 @@ function Index() {
         </section>
 
         {/* Como funciona */}
-        <section id="como-funciona" className="mt-16 md:mt-20">
+        <section id="como-funciona" className="scroll-mt-24 mt-16 md:mt-20">
           <div className="text-center max-w-2xl mx-auto mb-8">
             <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
               Como funciona
