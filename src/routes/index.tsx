@@ -155,6 +155,7 @@ function Index() {
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
             <a href="#sobre" className="hover:text-foreground transition">Sobre</a>
+            <a href="#por-que-doar" className="hover:text-foreground transition">Por que doar</a>
             <a href="#como-funciona" className="hover:text-foreground transition">Como funciona</a>
             <a href="#chat" className="hover:text-foreground transition">Conversar</a>
             <a href="#regulamentadas" className="hover:text-foreground transition">ONGs</a>
@@ -177,6 +178,7 @@ function Index() {
         {menuOpen && (
           <div className="md:hidden border-t border-border/60 px-4 py-3 flex flex-col gap-3 bg-background/95">
             <a href="#sobre" onClick={() => setMenuOpen(false)} className="text-sm">Sobre</a>
+            <a href="#por-que-doar" onClick={() => setMenuOpen(false)} className="text-sm">Por que doar</a>
             <a href="#como-funciona" onClick={() => setMenuOpen(false)} className="text-sm">Como funciona</a>
             <a href="#chat" onClick={() => setMenuOpen(false)} className="text-sm">Conversar</a>
             <a href="#regulamentadas" onClick={() => setMenuOpen(false)} className="text-sm">ONGs</a>
@@ -381,9 +383,9 @@ function Index() {
         <section id="regulamentadas" className="mt-16 grid md:grid-cols-3 gap-5">
           {[
             {
-              icon: Heart,
-              title: "Por que doar?",
-              text: "Pequenas doações sustentam grandes mudanças — alimentação, educação, saúde e dignidade chegam onde mais importa.",
+              icon: HandHeart,
+              title: "Impacto direto",
+              text: "Sua doação vai direto a quem precisa, sem intermediários — você acompanha de perto a transformação que ajudou a criar.",
             },
             {
               icon: ShieldCheck,
@@ -411,6 +413,52 @@ function Index() {
               <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
             </div>
           ))}
+        </section>
+
+        {/* Por que doar */}
+        <section id="por-que-doar" className="mt-16 md:mt-20">
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+              Por que doar?
+            </h2>
+            <p className="mt-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+              Pequenas doações sustentam grandes mudanças — alimentação, educação, saúde e dignidade chegam onde mais importa.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: Heart,
+                title: "Transforma vidas",
+                text: "Cada peça de roupa, alimento ou cobertor doado representa acolhimento, saúde e dignidade para quem mais precisa.",
+              },
+              {
+                icon: Sparkles,
+                title: "Fortalece comunidades",
+                text: "Apoiar ONGs locais sustenta projetos contínuos de educação, assistência e cidadania nos bairros que mais precisam.",
+              },
+              {
+                icon: ShieldCheck,
+                title: "Reduz desperdício",
+                text: "O que não usamos mais pode ser essencial para outra família. Doar é dar um novo propósito ao que já existe.",
+              },
+            ].map(({ icon: Icon, title, text }) => (
+              <div
+                key={title}
+                className="rounded-2xl bg-card border border-border/60 p-6"
+                style={{ boxShadow: "var(--shadow-soft)" }}
+              >
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center mb-4"
+                  style={{ background: "var(--gradient-brand)" }}
+                >
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-semibold text-foreground mb-1.5">{title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{text}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* Como funciona */}
